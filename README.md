@@ -2,9 +2,9 @@
 
 ---
 
-# vite-plugin-mix
+# vite-api-server
 
-[![npm version](https://badgen.net/npm/v/vite-plugin-mix)](https://npm.im/vite-plugin-mix)
+[![npm version](https://badgen.net/npm/v/vite-api-server)](https://npm.im/vite-api-server)
 
 ## Motivation
 
@@ -13,7 +13,11 @@ Writing front-end and back-end API in a single project allows faster development
 ## Install
 
 ```bash
-npm i vite-plugin-mix -D
+npm i vite-api-server -D
+```
+
+```bash
+yarn add --dev vite-api-server
 ```
 
 ## Usage
