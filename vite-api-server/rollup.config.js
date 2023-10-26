@@ -1,21 +1,21 @@
-import sucrase from '@rollup/plugin-sucrase'
-import nodeResolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import dts from 'rollup-plugin-dts'
-import pkg from './package.json'
+import sucrase from "@rollup/plugin-sucrase";
+import nodeResolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import dts from "rollup-plugin-dts";
+import pkg from "./package.json";
 
 const tsTransform = sucrase({
-  transforms: ['typescript'],
-})
+  transforms: ["typescript"],
+});
 
 /** @type {import('rollup').RollupOptions[]} */
 const configs = [
   {
-    input: './src/index.ts',
+    input: "./src/index.ts",
     output: {
-      format: 'cjs',
-      dir: './dist',
-      exports: 'named',
+      format: "esm",
+      dir: "./dist",
+      exports: "auto",
     },
     plugins: [tsTransform, commonjs(), nodeResolve()],
     external: [
@@ -24,21 +24,22 @@ const configs = [
     ],
   },
   {
-    input: './src/index.ts',
+    input: "./src/index.ts",
     output: {
-      format: 'esm',
-      dir: './dist',
+      format: "esm",
+      dir: "./dist",
     },
     plugins: [dts()],
+    external: ["http"],
   },
   {
-    input: ['./src/runtime/server.ts', './src/runtime/vercel-handler.ts'],
+    input: ["./src/runtime/server.ts", "./src/runtime/vercel-handler.ts"],
     output: {
-      format: 'esm',
-      dir: './dist/runtime',
+      format: "esm",
+      dir: "./dist/runtime",
     },
     plugins: [tsTransform, commonjs(), nodeResolve()],
   },
-]
+];
 
-export default configs
+export default configs;
