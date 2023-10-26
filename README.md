@@ -25,29 +25,29 @@ yarn add --dev vite-api-server
 `vite.config.ts`:
 
 ```ts
-import { defineConfig } from 'vite'
-import mix from 'vite-plugin-mix'
+import { defineConfig } from "vite";
+import { apiServer } from "vite-api-server";
 
 export default defineConfig({
   plugins: [
-    mix({
-      handler: './handler.ts',
+    apiServer({
+      handler: "./handler.ts",
     }),
   ],
-})
+});
 ```
 
 `handler.ts`:
 
 ```ts
-import type { Handler } from 'vite-plugin-mix'
+import type { Handler } from "vite-api-server";
 
 export const handler: Handler = (req, res, next) => {
-  if (req.path === '/hello') {
-    return res.end('hello')
+  if (req.path === "/hello") {
+    return res.end("hello");
   }
-  next()
-}
+  next();
+};
 ```
 
 The `handler` runs before serving static files, so you should make sure to call `next()` as a fallback. You can also use express-compatible middlewares in the handler.
@@ -79,17 +79,17 @@ By default the server runs at port `3000`, you can switch to a custom port by us
 To build for [Vercel](https://vercel.com), use the `vercelAdapter` in `vite.config.ts`:
 
 ```ts
-import { defineConfig } from 'vite'
-import mix, { vercelAdapter } from 'vite-plugin-mix'
+import { defineConfig } from "vite";
+import { apiServer, vercelAdapter } from "vite-api-server";
 
 export default defineConfig({
   plugins: [
-    mix({
-      handler: './handler.ts',
+    apiServer({
+      handler: "./handler.ts",
       adapter: vercelAdapter(),
     }),
   ],
-})
+});
 ```
 
 Then you can run `vite build` to build for Vercel.
@@ -99,46 +99,46 @@ Then you can run `vite build` to build for Vercel.
 ### Using Express
 
 ```ts
-import express from 'express'
+import express from "express";
 
-const app = express()
+const app = express();
 
-export const handler = app
+export const handler = app;
 ```
 
 ### Using Polka
 
 ```ts
-import polka from 'polka'
+import polka from "polka";
 
 export const handler = (req, res, next) => {
   const app = polka({
     onNoMatch: () => next(),
-  })
+  });
 
-  return app.handler(req, res)
-}
+  return app.handler(req, res);
+};
 ```
 
 ### Using Apollo GraphQL
 
 ```ts
-import { ApolloServer } from 'apollo-server-micro'
-import { typeDefs } from './schemas'
-import { resolvers } from './resolvers'
+import { ApolloServer } from "apollo-server-micro";
+import { typeDefs } from "./schemas";
+import { resolvers } from "./resolvers";
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
+const apolloServer = new ApolloServer({ typeDefs, resolvers });
 
-const GRAPHQL_ENDPOINT = '/api/graphql'
+const GRAPHQL_ENDPOINT = "/api/graphql";
 
-const apolloHandler = apolloServer.createHandler({ path: GRAPHQL_ENDPOINT })
+const apolloHandler = apolloServer.createHandler({ path: GRAPHQL_ENDPOINT });
 
 export const handler = (req, res, next) => {
-  if (req.path === '/api/graphql') {
-    return apolloHandler
+  if (req.path === "/api/graphql") {
+    return apolloHandler;
   }
-  next()
-}
+  next();
+};
 ```
 
 You can also use `express` + `apollo-server-express` if you want.
