@@ -1,12 +1,12 @@
-import path from 'path'
-import { Adapter } from '../types'
+import path from "path";
+import { Adapter } from "../types";
 
 export const nodeAdapter = (): Adapter => {
   return {
-    name: 'node',
+    name: "node",
 
     rollupInput: {
-      server: path.join(__dirname, 'runtime/server.js'),
+      server: path.join(__dirname, "runtime/server.js"),
     },
-  }
-}
+  };
+};

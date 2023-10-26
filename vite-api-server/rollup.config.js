@@ -13,9 +13,9 @@ const configs = [
   {
     input: "./src/index.ts",
     output: {
-      format: "esm",
+      format: "cjs",
       dir: "./dist",
-      exports: "auto",
+      exports: "named",
     },
     plugins: [tsTransform, commonjs(), nodeResolve()],
     external: [

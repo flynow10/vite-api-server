@@ -1,84 +1,84 @@
-import fs from 'fs'
-import path from 'path'
-import { Plugin, build } from 'vite'
-import polka from 'polka'
-import { nodeAdapter } from './adapters/node'
-import { Adapter } from './types'
+import fs from "fs";
+import path from "path";
+import { Plugin, build } from "vite";
+import polka from "polka";
+import { nodeAdapter } from "./adapters/node";
+import { Adapter } from "./types";
 import bodyParser from "body-parser";
 
-export * from './types'
+export * from "./types";
 
-export { nodeAdapter }
+export { nodeAdapter };
 
-export { vercelAdapter } from './adapters/vercel'
+export { vercelAdapter } from "./adapters/vercel";
 
-export default ({
+export const apiServer = ({
   handler,
   adapter,
 }: {
-  handler: string
-  adapter?: Adapter
+  handler: string;
+  adapter?: Adapter;
 }): Plugin => {
-  let root = process.cwd()
-  let clientOutDir: string | undefined
+  let root = process.cwd();
+  let clientOutDir: string | undefined;
 
-  const getHandlerFile = () => path.resolve(root, handler)
+  const getHandlerFile = () => path.resolve(root, handler);
 
   return {
-    name: 'mix',
+    name: "mix",
 
     configResolved(config) {
-      root = config.root
-      clientOutDir = path.resolve(root, config.build.outDir)
+      root = config.root;
+      clientOutDir = path.resolve(root, config.build.outDir);
     },
 
     configureServer(devServer) {
-      const handlerFile = getHandlerFile()
+      const handlerFile = getHandlerFile();
       devServer.middlewares.use(async (req, res, next) => {
         try {
-          const mod = await devServer.ssrLoadModule(`/@fs/${handlerFile}`)
+          const mod = await devServer.ssrLoadModule(`/@fs/${handlerFile}`);
           const server = polka({
             onNoMatch: () => next(),
-          })
+          });
           server.use((req: any, res: any, next: any) => {
-            req.viteServer = devServer
-            next()
-          })
+            req.viteServer = devServer;
+            next();
+          });
           server.use(bodyParser.json());
           if (Array.isArray(mod.handler)) {
-            mod.handler.forEach((handler) => server.use(handler))
+            mod.handler.forEach((handler) => server.use(handler));
           } else {
-            server.use(mod.handler)
+            server.use(mod.handler);
           }
-          server.handler(req as any, res)
+          server.handler(req as any, res);
         } catch (error) {
-          devServer.ssrFixStacktrace(error as Error)
-          process.exitCode = 1
-          next(error)
+          devServer.ssrFixStacktrace(error as Error);
+          process.exitCode = 1;
+          next(error);
         }
-      })
+      });
     },
 
     async writeBundle() {
-      if (process.env.MIX_SSR_BUILD) return
+      if (process.env.MIX_SSR_BUILD) return;
 
-      process.env.MIX_SSR_BUILD = 'true'
+      process.env.MIX_SSR_BUILD = "true";
 
-      adapter = adapter || nodeAdapter()
+      adapter = adapter || nodeAdapter();
 
-      const serverOutDir = path.join(root, 'build')
+      const serverOutDir = path.join(root, "build");
 
-      const handlerFile = getHandlerFile()
+      const handlerFile = getHandlerFile();
 
-      const buildOpts = { root, serverOutDir, clientOutDir: clientOutDir! }
+      const buildOpts = { root, serverOutDir, clientOutDir: clientOutDir! };
 
       if (adapter.buildStart) {
-        await adapter.buildStart(buildOpts)
+        await adapter.buildStart(buildOpts);
       }
 
-      const indexHtmlPath = path.join(clientOutDir!, 'index.html')
-      const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8')
-      fs.unlinkSync(indexHtmlPath)
+      const indexHtmlPath = path.join(clientOutDir!, "index.html");
+      const indexHtml = fs.readFileSync(indexHtmlPath, "utf8");
+      fs.unlinkSync(indexHtmlPath);
 
       await build({
         root,
@@ -88,10 +88,10 @@ export default ({
           },
         },
         define: {
-          'import.meta.env.MIX_CLIENT_DIR': JSON.stringify(
-            path.relative(process.cwd(), clientOutDir!),
+          "import.meta.env.MIX_CLIENT_DIR": JSON.stringify(
+            path.relative(process.cwd(), clientOutDir!)
           ),
-          'import.meta.env.MIX_HTML': JSON.stringify(indexHtml),
+          "import.meta.env.MIX_HTML": JSON.stringify(indexHtml),
         },
         build: {
           outDir: serverOutDir,
@@ -104,11 +104,11 @@ export default ({
             },
           },
         },
-      })
+      });
 
       if (adapter.buildEnd) {
-        await adapter.buildEnd(buildOpts)
+        await adapter.buildEnd(buildOpts);
       }
     },
-  }
-}
+  };
+};

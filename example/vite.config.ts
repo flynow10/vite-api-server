@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import mix, { vercelAdapter } from 'vite-plugin-mix'
+import { defineConfig } from "vite";
+import { apiServer, vercelAdapter } from "vite-api-server";
 
 export default defineConfig({
-  plugins: [mix({ handler: './handler.ts', adapter: vercelAdapter() })],
-})
+  plugins: [apiServer({ handler: "./handler.ts", adapter: vercelAdapter() })],
+});
