@@ -6,3 +6,4 @@ build/
 .vercel_build_output
 .vercel
 .pnpm-store
+package-lock.json

@@ -4,6 +4,7 @@ import { Plugin, build } from 'vite'
 import polka from 'polka'
 import { nodeAdapter } from './adapters/node'
 import { Adapter } from './types'
+import bodyParser from "body-parser";
 
 export * from './types'
 
@@ -43,6 +44,7 @@ export default ({
             req.viteServer = devServer
             next()
           })
+          server.use(bodyParser.json());
           if (Array.isArray(mod.handler)) {
             mod.handler.forEach((handler) => server.use(handler))
           } else {

@@ -31,6 +31,11 @@ export interface Request extends IncomingMessage {
   query: {
     [key: string]: string | string[]
   }
+
+  /**
+   * The parsed JSON body
+   */
+  body: any;
 }
 
 export type Response = ServerResponse
