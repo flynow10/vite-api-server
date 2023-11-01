@@ -1,6 +1,6 @@
 {
   "name": "vite-api-server",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Adding backend API to your Vite app",
   "publishConfig": {
     "access": "public"
@@ -41,5 +41,14 @@
   },
   "dependencies": {
     "@vercel/nft": "^0.10.1"
-  }
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "api",
+    "REST",
+    "development",
+    "express",
+    "polka"
+  ]
 }
