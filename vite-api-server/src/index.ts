@@ -3,8 +3,7 @@ import path from "path";
 import { Plugin, build } from "vite";
 import polka from "polka";
 import { nodeAdapter } from "./adapters/node";
-import { Adapter } from "./types";
-import bodyParser from "body-parser";
+import { Adapter, Middleware } from "./types";
 
 export * from "./types";
 
@@ -15,9 +14,11 @@ export { vercelAdapter } from "./adapters/vercel";
 export const apiServer = ({
   handler,
   adapter,
+  middleware,
 }: {
   handler: string;
   adapter?: Adapter;
+  middleware?: Middleware[];
 }): Plugin => {
   let root = process.cwd();
   let clientOutDir: string | undefined;
@@ -25,7 +26,7 @@ export const apiServer = ({
   const getHandlerFile = () => path.resolve(root, handler);
 
   return {
-    name: "mix",
+    name: "api-server",
 
     configResolved(config) {
       root = config.root;
@@ -44,7 +45,9 @@ export const apiServer = ({
             req.viteServer = devServer;
             next();
           });
-          server.use(bodyParser.json());
+          if (middleware) {
+            middleware.forEach((handle) => server.use(handle));
+          }
           if (Array.isArray(mod.handler)) {
             mod.handler.forEach((handler) => server.use(handler));
           } else {

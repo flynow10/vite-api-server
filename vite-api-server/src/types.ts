@@ -33,15 +33,24 @@ export interface Request extends IncomingMessage {
   };
 
   /**
-   * The parsed JSON body
+   * The parsed body of the request
+   *
+   * Note:
+   * Will be undefined if a body parser is not included in the middleware list
    */
-  body: any;
+  body: unknown;
 }
 
 export type Response = ServerResponse;
 export type NextFunction = (err?: Error) => void;
 
 export type Handler = (req: Request, res: Response, next: NextFunction) => any;
+
+export type Middleware = (
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: NextFunction
+) => void;
 
 type BuildOpts = {
   root: string;
