@@ -1,7 +1,3 @@
-**💛 You can help the author become a full-time open-source maintainer by [sponsoring him on GitHub](https://github.com/sponsors/egoist).**
-
----
-
 # vite-api-server
 
 [![npm version](https://badgen.net/npm/v/vite-api-server)](https://npm.im/vite-api-server)

@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "outDir": "./vite-api-server/dist"
+    "outDir": "./dist"
   },
-  "exclude": ["./vite-api-server/dist/**/*"]
+  "exclude": ["./dist/**/*"]
 }

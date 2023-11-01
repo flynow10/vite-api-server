@@ -7,8 +7,7 @@
     "serve-function": "node ./serve-function.mjs"
   },
   "devDependencies": {
-    "vite": "^3.1.8",
-    "vite-api-server": "^0.4.3"
+    "vite": "^3.1.8"
   },
   "dependencies": {
     "@types/body-parser": "^1.19.4",
