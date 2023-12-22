@@ -13,7 +13,7 @@ const configs = [
   {
     input: "./src/index.ts",
     output: {
-      format: "cjs",
+      format: "esm",
       dir: "./dist",
       exports: "named",
     },
