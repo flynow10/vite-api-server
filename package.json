@@ -1,6 +1,7 @@
 {
   "name": "vite-api-server",
-  "version": "0.5.3",
+  "version": "0.5.4",
+  "type": "module",
   "description": "Adding backend API to your Vite app",
   "publishConfig": {
     "access": "public"
