@@ -9,8 +9,6 @@ export * from "./types";
 
 export { nodeAdapter };
 
-export { vercelAdapter } from "./adapters/vercel";
-
 export const apiServer = ({
   handler,
   adapter,
